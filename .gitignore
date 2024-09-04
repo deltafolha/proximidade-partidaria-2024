@@ -1,0 +1,19 @@
+# R specific
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+
+# Data directories
+dados/brutos/
+dados/interim/
+dados/processado/
+
+# Specific R scripts (if needed)
+codigos/06_exportando_para_o_sheets.R
+codigos/07_graficos.R
+
+# OS specific
+.DS_Store
+Thumbs.db
