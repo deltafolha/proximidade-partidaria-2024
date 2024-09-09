@@ -18,7 +18,7 @@ Utilizamos quatro fontes principais de dados para nossa análise:
 
 Para as três primeiras fontes, aplicamos a técnica de Análise de Correspondência (CA) para reduzir a dimensionalidade dos dados e extrair as principais tendências de posicionamento dos partidos.
 
-Para as votações na Câmara, utilizamos MCMC IRT (Markov Chain Monte Carlo Item Response Theory) para obter o posicionamento, considerando a ausência de dados para todos deputados em todas votações.
+Para as votações na Câmara, utilizamos MCMC IRT (Markov Chain Monte Carlo Item Response Theory) para obter o posicionamento, considerando a ausência de dados em votações e a natureza binária dos dados.
 
 Para combinar as quatro medidas, o código segue os seguintes passos:
 
@@ -33,9 +33,8 @@ Para combinar as quatro medidas, o código segue os seguintes passos:
 
 É crucial entender que cada dimensão analisada (migração partidária, frentes parlamentares, coligações eleitorais e votações na Câmara) reflete diferentes aspectos da proximidade entre os partidos. Embora todas essas dimensões sejam influenciadas, em algum grau, pela ideologia política, cada uma também possui suas próprias peculiaridades e é afetada por fatores específicos.
 
-Por exemplo, a participação em frentes parlamentares pode refletir afinidades ideológicas, mas também desejo de visibildiade política e influência legislativa, enquanto as votações na Câmara são frequentemente influenciadas por dinâmicas políticas conjunturais. As migrações partidárias podem ser motivadas tanto por afinidades ideológicas quanto por interesses práticos, e as coligações eleitorais frequentemente equilibram ideologia com estratégia eleitoral.
+Por exemplo, a participação em frentes parlamentares pode refletir afinidades ideológicas, mas também desejo de visibildiade política e influência legislativa, enquanto as votações na Câmara são frequentemente influenciadas por dinâmicas políticas conjunturais. As migrações partidárias podem ser motivadas tanto por afinidades ideológicas quanto por interesses práticos individuais, e as coligações eleitorais frequentemente equilibram ideologia com estratégia eleitoral.
 
-A combinação dessas diferentes dimensões busca oferecer uma visão mais completa e matizada das proximidades partidárias, capturando tanto as tendências ideológicas quanto as complexidades da prática política.
 
 ## Limitações e Considerações
 
