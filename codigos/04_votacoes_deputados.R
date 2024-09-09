@@ -18,6 +18,8 @@ dir_votacao <- "dados/brutos/votacoes_camara/votos/"
 dir_resultado <- "dados/interim/resultados/"
 dir_detalhes_votacao <- "dados/brutos/votacoes_camara/detalhes/"
 
+baixar_novos_dados <- TRUE
+
 # cria diretorios ---------------------------------------------------------
 dirs <- c(dir_lista_votacoes, dir_votacao)
 for(dir in dirs){
@@ -25,64 +27,67 @@ for(dir in dirs){
 }
 
 # baixa as votacoes -------------------------------------------------------
-for(ano in 2023:2024){
-  cat(ano, "\n")
-  meses <- seq(1, 12) %>% 
-    str_pad(width = 2, pad = "0")
-  
-  data_inicio <- paste0(ano, "-01-01") %>% 
-    as.Date()
-  data_fim <- paste0(ano, "-12-31") %>% 
-    as.Date()
-  
-  range_meses <- seq.Date(data_inicio, data_fim, by = "day") %>% 
-    as_tibble() %>% 
-    mutate(mes = month(value)) %>%
-    group_by(mes) %>% 
-    filter(value %in% range(value))
-  
-  
-  votacoes_no_mes <- list()
-  for(mes_vot in meses){
-    cat("    |-", mes_vot, "\n")
-    path_lista_votacoes_mes <- glue("{dir_lista_votacoes}/{ano}_{mes_vot}.csv")
-    if(file.exists(path_lista_votacoes_mes)) next
+
+if(baixar_novos_dados){
+  for(ano in 2023:2024){
+    cat(ano, "\n")
+    meses <- seq(1, 12) %>% 
+      str_pad(width = 2, pad = "0")
     
-    range_mes <- range_meses %>% 
-      filter(mes == as.numeric(mes_vot)) %>% 
-      pull(value)
+    data_inicio <- paste0(ano, "-01-01") %>% 
+      as.Date()
+    data_fim <- paste0(ano, "-12-31") %>% 
+      as.Date()
     
-    pagina <- 1
-    repeat{
-      cat("         |- Pagina:", pagina, "\n")
-      url <- paste0("https://dadosabertos.camara.leg.br/api/v2/votacoes?",
-                    "dataInicio=", range_mes[1],
-                    "&dataFim=", range_mes[2],
-                    "&ordem=ASC",
-                    "&ordenarPor=dataHoraRegistro",
-                    "&pagina=", pagina,
-                    "&itens=200") 
-      for(attempt in 1:10) {
-        cat("            |- Tentativa", attempt, "\n")
-        response <- GET(url, timeout(60))
-        content <- content(response, "text", encoding = "UTF-8")
-        if(content == "upstream request timeout") next
-        break
-      }
+    range_meses <- seq.Date(data_inicio, data_fim, by = "day") %>% 
+      as_tibble() %>% 
+      mutate(mes = month(value)) %>%
+      group_by(mes) %>% 
+      filter(value %in% range(value))
+    
+    
+    votacoes_no_mes <- list()
+    for(mes_vot in meses){
+      cat("    |-", mes_vot, "\n")
+      path_lista_votacoes_mes <- glue("{dir_lista_votacoes}/{ano}_{mes_vot}.csv")
+      if(file.exists(path_lista_votacoes_mes)) next
       
-      content_json <- content %>% 
-        fromJSON()
-      lista_votacoes <- content_json$dados
-      if(length(lista_votacoes) == 0) break
-      cat("      |- N linhas:", nrow(lista_votacoes), "\n")
-      votacoes_no_mes[[length(votacoes_no_mes) + 1]] <- lista_votacoes 
-      if(nrow(lista_votacoes) < 200)  break
-      pagina <- pagina + 1
+      range_mes <- range_meses %>% 
+        filter(mes == as.numeric(mes_vot)) %>% 
+        pull(value)
+      
+      pagina <- 1
+      repeat{
+        cat("         |- Pagina:", pagina, "\n")
+        url <- paste0("https://dadosabertos.camara.leg.br/api/v2/votacoes?",
+                      "dataInicio=", range_mes[1],
+                      "&dataFim=", range_mes[2],
+                      "&ordem=ASC",
+                      "&ordenarPor=dataHoraRegistro",
+                      "&pagina=", pagina,
+                      "&itens=200") 
+        for(attempt in 1:10) {
+          cat("            |- Tentativa", attempt, "\n")
+          response <- GET(url, timeout(60))
+          content <- content(response, "text", encoding = "UTF-8")
+          if(content == "upstream request timeout") next
+          break
+        }
+        
+        content_json <- content %>% 
+          fromJSON()
+        lista_votacoes <- content_json$dados
+        if(length(lista_votacoes) == 0) break
+        cat("      |- N linhas:", nrow(lista_votacoes), "\n")
+        votacoes_no_mes[[length(votacoes_no_mes) + 1]] <- lista_votacoes 
+        if(nrow(lista_votacoes) < 200)  break
+        pagina <- pagina + 1
+      }
+      if(length(votacoes_no_mes) == 0) next
+      votacoes_no_mes %>% 
+        bind_rows() %>% 
+        write.csv(path_lista_votacoes_mes, row.names = FALSE)
     }
-    if(length(votacoes_no_mes) == 0) next
-    votacoes_no_mes %>% 
-      bind_rows() %>% 
-      write.csv(path_lista_votacoes_mes, row.names = FALSE)
   }
 }
 
@@ -152,7 +157,7 @@ for(i_votacao in seq_len(n_votacoes)){
       op <- op %>% 
         rename_all(paste0, "_objetosPossiveis")
     }
-      
+    
     n_op <- ifelse(is.null(nrow(op)), 0, nrow(op))
     n_pa <- ifelse(is.null(nrow(pa)), 0, nrow(pa))
     if(n_op > 1 & n_pa > 1){

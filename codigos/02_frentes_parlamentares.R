@@ -8,10 +8,17 @@ library(magrittr)
 library(tibble)
 library(tidyr)
 library(ca)
+library(data.table)
 
 # variavies ---------------------------------------------------------------
 dir_resultado <- "dados/interim/resultados/"
-dir_frentes <- "dados/interim/frentes/"
+dir_frentes <- "dados/brutos/frentes/"
+
+baixar_novos_dados <- TRUE
+
+# cria diretorio ----------------------------------------------------------
+if(!dir.exists(dir_frentes)) dir.create(dir_frentes, recursive = TRUE)
+
 
 # baixa dados das frentes -------------------------------------------------
 
@@ -36,6 +43,7 @@ for(i_frente in seq_len(n_frentes)){
   id <- id_frentes[i_frente]
   path_frente <- glue("{dir_frentes}/{id}.csv")
   if(file.exists(path_frente)) next
+  if(!baixar_novos_dados) next
   url_frente <- glue("https://www.camara.leg.br/internet/deputado/", 
                      "frenteDetalhe.asp?id={id}")
   html <- url_frente %>% 
@@ -57,7 +65,9 @@ for(i_frente in seq_len(n_frentes)){
 # Juntas asa tabelas. 
 # No fim vamos ter uma tabela de parlamentares e seus partidos e das frentes que
 # participam
-frentes <- tabelas_frentes %>% 
+frentes <- dir_frentes %>%
+  list.files(full.names = TRUE) %>% 
+  map(fread, colClasses = "character") %>% 
   bind_rows()
 
 # 1. Remove parlamentar sem partido e a linha que diz o total de parlamentares
