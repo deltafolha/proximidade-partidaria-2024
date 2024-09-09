@@ -59,7 +59,7 @@ cd proximidade-partidaria-2024/
 ```
 packages <- c("dplyr", "stringr", "purrr", "data.table", "tidyr", "tibble", 
               "ca", "magrittr", "glue", "rvest", "jsonlite", "httr", "lubridate", 
-              "MCMCpack", "ggplot2", "scales")
+              "MCMCpack", "scales")
 install.packages(packages)
 
 ```
