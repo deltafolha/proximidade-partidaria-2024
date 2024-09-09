@@ -43,26 +43,6 @@ Por exemplo, a participação em frentes parlamentares pode refletir afinidades 
 
 ## Reproduzindo os Resultados
 
-Para reproduzir os resultados deste projeto, siga estas etapas:
-
-1. Clone este repositório.
-2. Instale as dependências necessárias. Os pacotes R utilizados estão listados no início de cada script.
-3. Execute os scripts na seguinte ordem:
-   - `01_migracao_partidaria.R`
-   - `02_frentes_parlamentares.R`
-   - `03_coligacoes.R`
-   - `04_votacoes_deputados.R`
-   - `05_juntando_tudo.R`
-
-Cada script gera resultados intermediários que são salvos na pasta dados/interim/resultados/. O script final 05_juntando_tudo.R combina todos os resultados para produzir a classificação final dos partidos.
-
-Note que os scripts fazem download de dados do TSE e da Câmara dos Deputados. Para garantir a reprodutibilidade exata dos resultados apresentados nesta análise, disponibilizamos um arquivo com os dados brutos utilizados na época do estudo. Você pode acessar esses dados através do seguinte [link](https://drive.google.com/file/d/1qubWwJqNr-iVjsXErnzn3DlgSTw_J1mn/view?usp=drive_link)
-
-
-Ao usar estes dados, você poderá replicar os resultados exatos da análise original. Se optar por baixar dados atualizados diretamente das fontes, os resultados podem variar devido a atualizações nas informações.
-
-# Aqui um passo a passo para reproduzir a análise:
-
 1. Clone o repositório:
 
 ```
