@@ -21,7 +21,7 @@ dir_detalhes_votacao <- "dados/brutos/votacoes_camara/detalhes/"
 baixar_novos_dados <- TRUE
 
 # cria diretorios ---------------------------------------------------------
-dirs <- c(dir_lista_votacoes, dir_votacao)
+dirs <- c(dir_lista_votacoes, dir_votacao, dir_detalhes_votacao)
 for(dir in dirs){
   if(!dir.exists(dir)) dir.create(dir, recursive = TRUE)
 }
