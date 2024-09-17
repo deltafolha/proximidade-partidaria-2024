@@ -100,9 +100,7 @@ resultado_d1 <- ca_result %>%
   as.data.frame() %>% 
   rownames_to_column("partido") %>% 
   select(partido, Dim1) %>% 
-  arrange(Dim1) %>% 
-  mutate(partido = str_remove(partido, "/\\d+"))
-
+  arrange(Dim1)
 
 path_resultado <- glue("{dir_resultado}/d1_coligacoes.csv")
 write.csv(resultado_d1, path_resultado, row.names = FALSE)
