@@ -2,7 +2,7 @@
 
 ## Sobre o Projeto
 
-Este projeto visa analisar e quantificar a proximidade dos partidos políticos brasileiros em diferentes dimensões, utilizando dados públicos. A análise busca capturar as relações entre os partidos em várias esferas de atuação política, fornecendo uma visão multidimensional das proximidades partidárias.
+Este projeto visa analisar e quantificar a proximidade dos partidos políticos brasileiros em diferentes dimensões, utilizando dados públicos. A análise busca capturar as relações entre os partidos em várias esferas de atuação política.
 
 ## Metodologia
 
